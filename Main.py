@@ -1,12 +1,3 @@
-
-
----------- Forwarded message ---------
-From: SAMU IDHAYAN I URK21CS2006 <isamu@karunya.edu.in>
-Date: Wed, Aug 10, 2022 at 9:57 AM
-Subject:
-To: <sujithrose@karunya.edu.in>
-
-
 class Evaluate:
   """This class validates and evaluate postfix expression.
   Attributes:
