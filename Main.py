@@ -1,118 +1,203 @@
-class Evaluate:
-  """This class validates and evaluate postfix expression.
-  Attributes:
-      top: An integer which denotes the index of the element at the top of the stack currently.
-      size_of_stack: An integer which represents the size of stack.
-      stack: A List which acts as a Stack.
-  """
+class Solution:
+    """This class implements linear queue.
+      Attributes:
+          stack: A list which maintains the content of stack.
+          queue: A list which maintains the content of queue.
+          top: An integer which denotes the index of the element at the top of the stack.
+          front: An integer which denotes the index of the element at the front of the queue.
+          rear: An integer which denotes the index of the element at the rear of the queue.
+          size: An integer which represents the size of stack and queue.
+      """
+
     # Write your code here
+    def __init__(self, size):
+       
+        """Inits Solution with stack, queue, size, top, front and rear.
+        Arguments:
+          size: An integer to set the size of stack and queue.
+        """
+        self.stack = [None]*size
+        self.queue = [None]*size
+        self.size = size
+        self.top = -1
+        self.rear = -1
+        self.front = -1
 
-  def __init__(self, size):
-    """Inits Evaluate with top, size_of_stack and stack.
-    Arguments:
-      top:An integer which points to the top most element in the stack.
-      size_of_stack: An integer which represents size of stack.
-      stack: A list which maintians the elements of stack.
-    """
-    self.top = -1
-    self.size_of_stack = size
-    self.stack = []
+    def is_stack_empty(self):
+        """
+        Check whether the stack is empty.
+        Returns:
+          True if it is empty, else returns False.
+        """
+       
+        return self.top==-1
 
+    def is_queue_empty(self):
+        """
+        Check whether the queue is empty.
+        Returns:
+          True if it is empty, else returns False.
+        """
+        return self.rear<self.front
 
-  def isEmpty(self):
-    """
-    Check whether the stack is empty.
-    Returns:
-      True if it is empty, else returns False.
-    """
-    # Write your code here
-    if self.top == -1:
-      return True
-    else:
-      return False
-
-
-  def pop(self):
-    """
-    Do pop operation if the stack is not empty.
-    Returns:
-      The data which is popped out if the stack is not empty.
-    """
-    # Write your code here
-    if not self.isEmpty():
-      self.stack.pop()
-
-
-  def push(self, operand):
-    """
-    Push the operand to stack if the stack is not full.
-    Arguments:
-      operand: The operand to be pushed.
-    """
-    # Write your code here
-    if self.top != self.size_of_stack - 1:
-      self.stack.append(operand)
+    def is_stack_full(self):
+        """
+        Check whether the stack is full.
+        Returns:
+          True if it is full, else returns False.
+        """
+        return self.top==(self.size-1)
 
 
-  def validate_postfix_expression(self, expression):
-    """
-    Check whether the expression is a valid postfix expression.
-    Arguments:
-      expression: A String which represents the expression to be validated.
-    Returns:
-      True if the expression is valid, else returns False.
-    """
-    # Write your code here
-    a = 0
-    b = 0
-    for element in expression:
-      if element.isnumeric():
-        a = a + 1
-      else:
-        b = b + 1
-    if b == a - 1:
-      return True
-    else:
-      return False
+    def is_queue_full(self):
+        """
+        Check whether the queue is full.
+        Returns:
+          True if it is full, else returns False.
+        """
+        return self.rear==(self.size-1)
+
+    def push_character(self, character):
+        """
+        Push the character to stack, if stack is not full.
+        Arguments:
+            character: A character that will be pushed to the stack.
+        """
+        if self.is_stack_full()==False:
+           
+            self.top+=1
+            self.stack[self.top]=character
 
 
-  def evaluate_postfix_expression(self, expression):
-    """
-    Evaluate the postfix expression
-    Arguments:
-      expression: A String which represents the the expression to be evaluated
-    Returns:
-      The result of evaluated postfix expression.
-    """
-    # Write your code here
-    stack = []
-    for i in expression:
-      if i.isnumeric():
-        stack.append(int(i))
-      if len(stack) >= 2:
-        if i == '+':
-          stack[-2] = stack[-2] + stack[-1]
-          stack.pop()
-        elif i == '-':
-          stack[-2] = stack[-2] - stack[-1]
-          stack.pop()
-        elif i == '*':
-          stack[-2] = stack[-2] * stack[-1]
-          stack.pop()
-        elif i == '/':
-          stack[-2] = stack[-2] / stack[-1]
-          stack.pop()
-        elif i == '^':
-          stack[-2] = stack[-2] ^ stack[-1]
-          stack.pop()
-    return int(stack[-1])
+    def enqueue_character(self, character):
+        """
+        Enqueue the character to queue, if queue is not full.
+        Arguments:
+            character: A character that will be enqueued to queue.
+        """
+        if self.is_queue_full()==False:
+            if self.front==-1:
+                self.front=0
+            self.rear+=1
+            self.queue[self.rear]=character
 
 
-# Do not change the following code
-postfix_expression = input()  # Read postfix expression
-tokens = postfix_expression.split()
-evaluate = Evaluate(len(tokens))
-if evaluate.validate_postfix_expression(tokens):
-    print(evaluate.evaluate_postfix_expression(tokens))
+    def pop_character(self):
+        """
+        Do pop operation if the stack is not empty.
+        Returns:
+          The data that is popped out if the stack is not empty.
+        """
+        if self.is_stack_empty()==False:
+            x=self.stack[self.top]
+            self.top-=1
+            return x
+
+
+    def dequeue_character(self):
+        """
+        Do dequeue operation if the queue is not empty.
+        Returns:
+          The data that is dequeued if the queue is not empty.
+        """
+        if self.is_queue_empty()==False:
+            x=self.queue[self.front]
+            if self.front==self.rear:
+                self.front=-1
+                self.rear=-1
+            else:
+                self.front+=1
+            return x
+
+
+# read the string text
+text = input()
+
+# find the length of text
+length_of_text = len(text)
+
+# Create the Solution class object
+solution = Solution(length_of_text)
+
+# push/enqueue all the characters of string text to stack
+for index in range(length_of_text):
+    solution.push_character(text[index])
+    solution.enqueue_character(text[index])
+
+is_palindrome = True
+'''
+pop the top character from stack
+dequeue the first character from queue
+compare both characters
+If the comparison fails, set is_palindrome as False.
+'''
+
+for i in range(int(length_of_text/2)):
+    if(solution.pop_character()!=solution.dequeue_character()):
+        is_palindrome=False
+
+
+# finally print whether string text is palindrome or not.
+if is_palindrome:
+    print("The word, " + text + ", is a palindrome.")
 else:
-    print('Invalid postfix expression')
+    print("The word, " + text + ", is not a palindrome.")
+
+
+3b
+
+
+
+class MyCircularQueue:
+    def __init__(self, size: int):
+        self.size=size
+        self.queue=[None]*size
+        self.rear=-1
+        self.front=-1
+
+    def enqueue(self, value: int) -> bool:
+       
+        if(self.is_full()==False):
+            if(self.front==-1):
+                self.front=0
+                self.rear=0
+                self.queue[self.rear]=value
+            else:
+                self.rear=(self.rear+1)%self.size
+                self.queue[self.rear]=value
+            return True
+        else:
+            return False
+
+    def dequeue(self) -> bool:
+        if(self.is_empty()==False):
+            if(self.front==self.rear):
+                self.front=-1
+                self.rear=-1
+                return True
+            else:
+                self.front=(self.front+1)%self.size
+                return True
+        else:
+            return False
+               
+
+    def get_front(self) -> int:
+        if(self.is_empty()==False):
+            return self.queue[self.front]
+        else:
+            return -1
+
+    def get_rear(self):
+        if(self.is_empty()==False):
+            return self.queue[self.rear]
+        else:
+            return -1
+
+    def is_empty(self):
+        return self.front==-1
+
+    def is_full(self):
+        return (self.rear+1)%self.size==self.front
+
+
